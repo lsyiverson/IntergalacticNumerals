@@ -28,7 +28,7 @@ public class IntergalacticNumeralTranslator {
 
     /**
      * Init the Intergalactic Numeral Translator
-     * 
+     *
      * @return the instance of the translator
      */
     public static IntergalacticNumeralTranslator init() {
@@ -42,7 +42,7 @@ public class IntergalacticNumeralTranslator {
     /**
      * Handle the input data, if the data can not be handle, it will out
      * "I have no idea what you are talking about"
-     * 
+     *
      * @param input
      *            The input data from user
      */
@@ -62,7 +62,7 @@ public class IntergalacticNumeralTranslator {
 
     /**
      * Check if the sentence is setting Intergalactic numeral to Roman numeral
-     * 
+     *
      * @param s
      *            the sentence
      * @return <tt>true</tt> if the sentence actually is setting Intergalactic
@@ -74,11 +74,11 @@ public class IntergalacticNumeralTranslator {
         Matcher matcher = p.matcher(s);
         return matcher.find();
     }
-    
+
     /**
      * Check if the sentence is convert from Intergalactic Numeral to Arabic
      * Numeral
-     * 
+     *
      * @param s
      *            the sentence
      * @return <tt>true</tt> if the sentence is convert number from Integalactic
@@ -96,16 +96,20 @@ public class IntergalacticNumeralTranslator {
         if (!matcher.find()) {
             return false;
         } else {
-            String intergNum = matcher.group("intergNum");
-            int arabicNum = convertIntergToArabic(intergNum);
-            System.out.println(intergNum + " is " + arabicNum);
-            return true;
+            try{
+                String intergNum = matcher.group("intergNum");
+                int arabicNum = convertIntergToArabic(intergNum);
+                System.out.println(intergNum + " is " + arabicNum);
+                return true;
+            }catch (NumberFormatException e) {
+                return false;
+            }
         }
     }
 
     /**
      * Setup the map from Intergalactic to Roman;
-     * 
+     *
      * @param s
      *            The input string
      */
@@ -125,7 +129,7 @@ public class IntergalacticNumeralTranslator {
 
     /**
      * Check if the sentence is set the price of metals
-     * 
+     *
      * @param s
      *            the sentence
      * @return <tt>true</tt> if the sentence is set the price of metals
@@ -134,15 +138,15 @@ public class IntergalacticNumeralTranslator {
         // Create the regex to match the sentence
         String intergNumerals = getAllIntergNumeral();
         Pattern p = Pattern.compile("^((" + intergNumerals
-                        + ") )+[a-zA-Z]+ is \\d+ Credit(s)?$",
-                        Pattern.CASE_INSENSITIVE);
+                + ") )+[a-zA-Z]+ is \\d+ Credit(s)?$",
+                Pattern.CASE_INSENSITIVE);
         Matcher matcher = p.matcher(s);
         return matcher.find();
     }
 
     /**
      * Calculate the price of the metal mentioned in sentence
-     * 
+     *
      * @param s
      *            the sentence
      */
@@ -171,7 +175,7 @@ public class IntergalacticNumeralTranslator {
     /**
      * Convert Intergalactic Numeral to Arabic Numeral in order to calculate the
      * metal price
-     * 
+     *
      * @param intergNum
      *            Intergalactic Numeral
      * @return Arabic Numeral
@@ -193,7 +197,7 @@ public class IntergalacticNumeralTranslator {
 
     /**
      * Get the saved Intergalactic numeral, split by '|'
-     * 
+     *
      * @return all of the known Intergalactic numeral
      */
     private String getAllIntergNumeral() {
@@ -201,7 +205,7 @@ public class IntergalacticNumeralTranslator {
                 .iterator();
         StringBuilder builder = new StringBuilder();
         while (iter.hasNext()) {
-            Map.Entry<String, String> entry = (Map.Entry<String, String>) iter
+            Map.Entry<String, String> entry = iter
                     .next();
             if (builder.length() != 0) {
                 builder.append("|");
@@ -214,7 +218,7 @@ public class IntergalacticNumeralTranslator {
 
     /**
      * Get all metals name which price is known.
-     * 
+     *
      * @return all metals name, split by '|'
      */
     private String getAllMetals() {
@@ -222,7 +226,7 @@ public class IntergalacticNumeralTranslator {
                 .iterator();
         StringBuilder builder = new StringBuilder();
         while (iter.hasNext()) {
-            Map.Entry<String, Double> entry = (Map.Entry<String, Double>) iter
+            Map.Entry<String, Double> entry = iter
                     .next();
             if (builder.length() != 0) {
                 builder.append("|");
@@ -246,14 +250,18 @@ public class IntergalacticNumeralTranslator {
         if (!matcher.find()) {
             return false;
         } else {
-            String intergNum = matcher.group("intergNum");
-            String metal = matcher.group("metal");
-            int amount = convertIntergToArabic(intergNum);
-            double price = mMetalUnitPrice.get(metal);
-            int total = (int) (amount * price);
-            System.out.println(intergNum + " " + metal + " is " + total
-                    + " Credits");
+            try{
+                String intergNum = matcher.group("intergNum");
+                String metal = matcher.group("metal");
+                int amount = convertIntergToArabic(intergNum);
+                double price = mMetalUnitPrice.get(metal);
+                int total = (int) (amount * price);
+                System.out.println(intergNum + " " + metal + " is " + total
+                        + " Credits");
+                return true;
+            } catch(NumberFormatException e) {
+                return false;
+            }
         }
-        return true;
     }
 }
