@@ -62,10 +62,12 @@ public final class RomanNumeral {
         StringBuilder result = new StringBuilder();
         
         // Use the existed Roman and Arabic
-        for(int i = 0; i < DigitArabic.length; i++) {
+        for (int i = 0; i < DigitArabic.length;) {
             if (number >= DigitArabic[i]) {
                 result.append(DigitRoman[i]);
                 number -= DigitArabic[i];
+            } else {
+                i++;
             }
 
             if (number == 0) {
